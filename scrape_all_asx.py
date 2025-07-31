@@ -10,7 +10,7 @@ HEADERS = {"User-Agent": "Mozilla/5.0"}
 
 def get_asx_tickers():
     """Load ticker list with industry from full CSV."""
-    with open("asx_list.csv", newline='', encoding='utf-8') as f:
+    with open("asx_tickers.csv", newline='', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         return [
             {
