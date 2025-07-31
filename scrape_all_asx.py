@@ -59,9 +59,11 @@ def main():
             results.append({
                 "ticker": ticker,
                 "company": company["company"],
+                "industry": company["industry"],
                 "close": price,
                 "market_cap": market_cap
             })
+
         time.sleep(1)  # avoid rate limits
 
     today = datetime.now().strftime("%Y-%m-%d")
