@@ -9,17 +9,18 @@ import time
 HEADERS = {"User-Agent": "Mozilla/5.0"}
 
 def get_asx_tickers():
-    """Load ticker list with industry from full CSV."""
+    """Load ticker list from asx_tickers.csv with correct headers."""
     with open("asx_tickers.csv", newline='', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         return [
             {
-                "ticker": row["asx code"].strip(),
-                "company": row["company name"].strip(),
-                "industry": row["industry"].strip()
+                "ticker": row["ASX code"].strip(),
+                "company": row["Company name"].strip(),
+                "industry": row["GICs industry group"].strip()
             }
             for row in reader
         ]
+
 
 
 def get_price_and_market_cap_yahoo(ticker):
