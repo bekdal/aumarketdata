@@ -10,19 +10,30 @@ HEADERS = { "User-Agent": "Mozilla/5.0" }
 def get_asx_tickers():
     url = "https://www.marketindex.com.au/asx-listed-companies"
     response = requests.get(url, headers=HEADERS)
-    soup = BeautifulSoup(response.text, "html.parser")
     
+    if response.status_code != 200:
+        print(f"[ERROR] Failed to load ASX list. Status code: {response.status_code}")
+        return []
+
+    soup = BeautifulSoup(response.text, "html.parser")
     table = soup.find("table")
+
+    if not table:
+        print("[ERROR] Could not find <table> in page — page structure may have changed or request was blocked.")
+        return []
+
     rows = table.find("tbody").find_all("tr")
     
     companies = []
     for row in rows:
         cols = row.find_all("td")
-        code = cols[0].text.strip()
-        name = cols[1].text.strip()
-        companies.append({"ticker": code, "company": name})
+        if len(cols) >= 2:
+            code = cols[0].text.strip()
+            name = cols[1].text.strip()
+            companies.append({"ticker": code, "company": name})
     
     return companies
+
 
 def get_price_and_market_cap_yahoo(ticker):
     url = f"https://au.finance.yahoo.com/quote/{ticker}.AX"
