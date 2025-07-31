@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ASX Closing Prices</title>
+  <style>
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #eee; }
+  </style>
+</head>
+<body>
+  <h1>ASX Closing Prices (Latest)</h1>
+  <table id="price-table">
+    <thead>
+      <tr>
+        <th>ASX Code</th><th>Company</th><th>Closing Price</th><th>Market Cap</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    fetch('data/latest.json')
+      .then(response => response.json())
+      .then(data => {
+        const tbody = document.querySelector("#price-table tbody");
+        data.forEach(row => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${row.ticker}</td><td>${row.company}</td><td>$${row.close.toFixed(2)}</td><td>${row.market_cap || "—"}</td>`;
+          tbody.appendChild(tr);
+        });
+      });
+  </script>
+</body>
+</html>
