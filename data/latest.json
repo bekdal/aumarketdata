@@ -1,0 +1,51 @@
+[
+  {
+    "ticker": "EDEDA",
+    "company": "EDEN INNOVATIONS LTD",
+    "industry": "Energy",
+    "close": 8996.9,
+    "market_cap": null
+  },
+  {
+    "ticker": "MC2",
+    "company": "MARIMACA COPPER CORP.",
+    "industry": "Materials",
+    "close": 8999.1,
+    "market_cap": null
+  },
+  {
+    "ticker": "MIONA",
+    "company": "MACARTHUR MINERALS LIMITED",
+    "industry": "Materials",
+    "close": 9000.0,
+    "market_cap": null
+  },
+  {
+    "ticker": "NSMN",
+    "company": "NORTH STAWELL MINERALS LTD",
+    "industry": "Materials",
+    "close": 9000.1,
+    "market_cap": null
+  },
+  {
+    "ticker": "SHPN",
+    "company": "SOUTH HARZ POTASH LTD",
+    "industry": "Materials",
+    "close": 9002.3,
+    "market_cap": null
+  },
+  {
+    "ticker": "XSTDB",
+    "company": "XSTATE RESOURCES LIMITED",
+    "industry": "Energy",
+    "close": 9002.3,
+    "market_cap": null
+  },
+  {
+    "ticker": "ZNON",
+    "company": "ZOONO GROUP LIMITED",
+    "industry": "Materials",
+    "close": 9002.3,
+    "market_cap": null
+  }
+]
