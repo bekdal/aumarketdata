@@ -1,46 +1,26 @@
-
 import requests
 from bs4 import BeautifulSoup
+import csv
 import json
 from datetime import datetime
+import os
 import time
 
-HEADERS = { "User-Agent": "Mozilla/5.0" }
+HEADERS = {"User-Agent": "Mozilla/5.0"}
 
 def get_asx_tickers():
-    url = "https://www.marketindex.com.au/asx-listed-companies"
-    response = requests.get(url, headers=HEADERS)
-    
-    if response.status_code != 200:
-        print(f"[ERROR] Failed to load ASX list. Status code: {response.status_code}")
-        return []
-
-    soup = BeautifulSoup(response.text, "html.parser")
-    table = soup.find("table")
-
-    if not table:
-        print("[ERROR] Could not find <table> in page — page structure may have changed or request was blocked.")
-        return []
-
-    rows = table.find("tbody").find_all("tr")
-    
-    companies = []
-    for row in rows:
-        cols = row.find_all("td")
-        if len(cols) >= 2:
-            code = cols[0].text.strip()
-            name = cols[1].text.strip()
-            companies.append({"ticker": code, "company": name})
-    
-    return companies
-
+    """Load ticker list from CSV."""
+    with open("asx_tickers.csv", newline='') as f:
+        reader = csv.DictReader(f)
+        return [row for row in reader]
 
 def get_price_and_market_cap_yahoo(ticker):
+    """Scrape closing price and market cap for a ticker from Yahoo Finance."""
     url = f"https://au.finance.yahoo.com/quote/{ticker}.AX"
     try:
         response = requests.get(url, headers=HEADERS)
         soup = BeautifulSoup(response.text, "html.parser")
-        
+
         price_tag = soup.find("fin-streamer", {"data-field": "regularMarketPrice"})
         price = float(price_tag.text.replace(",", "")) if price_tag else None
 
@@ -59,7 +39,9 @@ def get_price_and_market_cap_yahoo(ticker):
 
 def main():
     companies = get_asx_tickers()
-    print(f"Found {len(companies)} ASX listings...")
+    print(f"Loaded {len(companies)} companies from CSV...")
+
+    os.makedirs("data", exist_ok=True)  # ✅ Ensure data/ folder exists
 
     results = []
     for company in companies:
@@ -72,7 +54,7 @@ def main():
                 "close": price,
                 "market_cap": market_cap
             })
-        time.sleep(1)
+        time.sleep(1)  # avoid rate limits
 
     today = datetime.now().strftime("%Y-%m-%d")
     with open(f"data/{today}.json", "w") as f:
@@ -81,7 +63,8 @@ def main():
     with open("data/latest.json", "w") as f:
         json.dump(results, f, indent=2)
 
-    print(f"[DONE] Saved {len(results)} entries to data/{today}.json")
+    print(f"[DONE] Saved {len(results)} records to data/{today}.json and data/latest.json")
 
 if __name__ == "__main__":
     main()
+
