@@ -15,7 +15,7 @@
   <table id="price-table">
     <thead>
       <tr>
-        <th>ASX Code</th><th>Company</th><th>Closing Price</th><th>Market Cap</th>
+        <th>ASX Code</th><th>Company</th><th>Industry</th><th>Closing Price</th><th>Market Cap</th>
       </tr>
     </thead>
     <tbody></tbody>
@@ -28,7 +28,7 @@
         const tbody = document.querySelector("#price-table tbody");
         data.forEach(row => {
           const tr = document.createElement("tr");
-          tr.innerHTML = `<td>${row.ticker}</td><td>${row.company}</td><td>$${row.close.toFixed(2)}</td><td>${row.market_cap || "—"}</td>`;
+          tr.innerHTML = `<td>${row.ticker}</td><td>${row.company}</td><td>${row.industry}</td><td>$${row.close.toFixed(2)}</td><td>${row.market_cap || "—"}</td>`;
           tbody.appendChild(tr);
         });
       });
