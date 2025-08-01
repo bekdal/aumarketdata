@@ -45,7 +45,7 @@
               <td>\${row.ticker}</td>
               <td>\${row.company}</td>
               <td>\${row.industry}</td>
-              <td>\${row.close > 0 ? '$' + row.close.toFixed(2) : ''}</td>
+              <td>${row.close && row.close > 0 ? '$' + row.close.toFixed(2) : ''}</td>
               <td>\${row.market_cap || ''}</td>
             \`;
             tbody.appendChild(tr);
