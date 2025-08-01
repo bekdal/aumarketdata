@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,32 +33,33 @@
         const tbody = document.querySelector("#price-table tbody");
         const searchInput = document.getElementById("search");
 
+        // Ensure the renderTable function is inside the then() block and properly indented
         function renderTable(filter = "") {
-  tbody.innerHTML = "";
-  data.filter(row => {
-    const text = \`\${row.ticker} \${row.company} \${row.industry}\`.toLowerCase();
-    return text.includes(filter.toLowerCase());
-  }).forEach(row => {
-    const tr = document.createElement("tr");
+          tbody.innerHTML = "";
+          data.filter(row => {
+            const text = `${row.ticker} ${row.company} ${row.industry}`.toLowerCase();
+            return text.includes(filter.toLowerCase());
+          }).forEach(row => {
+            const tr = document.createElement("tr");
 
-    const closePrice = (typeof row.close === "number" && row.close > 0) ? ('$' + row.close.toFixed(2)) : '';
-    const marketCap = row.market_cap || '';
+            const closePrice = (typeof row.close === "number" && row.close > 0) ? ('$' + row.close.toFixed(2)) : '';
+            const marketCap = row.market_cap || '';
 
-    tr.innerHTML = \`
-      <td>\${row.ticker}</td>
-      <td>\${row.company}</td>
-      <td>\${row.industry}</td>
-      <td>\${closePrice}</td>
-      <td>\${marketCap}</td>
-    \`;
+            tr.innerHTML = `
+              <td>${row.ticker}</td>
+              <td>${row.company}</td>
+              <td>${row.industry}</td>
+              <td>${closePrice}</td>
+              <td>${marketCap}</td>
+            `;
 
-    tbody.appendChild(tr);
-  });
-}
+            tbody.appendChild(tr);
+          });
+        }
 
-
+        // Add event listener for search input
         searchInput.addEventListener("input", e => renderTable(e.target.value));
-        renderTable(); // initial render
+        renderTable(); // Initial render
       });
   </script>
 </body>
