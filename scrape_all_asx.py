@@ -57,13 +57,14 @@ def main():
         ticker = company["ticker"]
         price, market_cap = get_price_and_market_cap_yahoo(ticker)
         if price is not None:
-            results.append({
-                "ticker": ticker,
-                "company": company["company"],
-                "industry": company["industry"],
-                "close": price,
-                "market_cap": market_cap
-            })
+results.append({
+    "ticker": ticker,
+    "company": company["company"],
+    "industry": company["industry"],
+    "close": price if price is not None else 0.0,
+    "market_cap": market_cap if market_cap else ""
+})
+
 
         time.sleep(1)  # avoid rate limits
 
