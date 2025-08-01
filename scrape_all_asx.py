@@ -29,8 +29,9 @@ def get_price_and_market_cap_yahoo(ticker):
     try:
         response = requests.get(url, headers=HEADERS)
         soup = BeautifulSoup(response.text, "html.parser")
+        
 
-        price_tag = soup.find("fin-streamer", {"data-field": "regularMarketPrice"})
+        price_tag = soup.find("span", {"data-testid": "qsp-price"})
         price = float(price_tag.text.replace(",", "")) if price_tag else None
 
         market_cap = None
