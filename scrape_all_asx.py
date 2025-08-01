@@ -21,28 +21,25 @@ def get_asx_tickers():
             for row in reader
         ]
 
+import requests
+
 def get_price_and_market_cap_yahoo(ticker):
-    url = f"https://au.finance.yahoo.com/quote/{ticker}.AX"
+    url = f"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{ticker}.AX?modules=price"
+    headers = {"User-Agent": "Mozilla/5.0"}
+    response = requests.get(url, headers=headers)
+
+    if response.status_code != 200:
+        print(f"[WARN] Failed to fetch {ticker}: {response.status_code}")
+        return None, None
+
     try:
-        response = requests.get(url, headers=HEADERS)
-        soup = BeautifulSoup(response.text, "html.parser")
-
-        # Extract price from qsp-price span
-        price_tag = soup.find("span", {"data-testid": "qsp-price"})
-        price = float(price_tag.text.replace(",", "")) if price_tag else None
-
-        # Extract market cap
-        market_cap = None
-        rows = soup.find_all("tr")
-        for row in rows:
-            cells = row.find_all("td")
-            if len(cells) == 2 and "Market Cap" in cells[0].text:
-                market_cap = cells[1].text.strip()
-                break
-
+        data = response.json()
+        price_data = data["quoteSummary"]["result"][0]["price"]
+        price = price_data.get("regularMarketPrice", {}).get("raw", None)
+        market_cap = price_data.get("marketCap", {}).get("raw", None)
         return price, market_cap
     except Exception as e:
-        print(f"[ERROR] {ticker}: {e}")
+        print(f"[ERROR] Parsing failed for {ticker}: {e}")
         return None, None
 
 def main():
