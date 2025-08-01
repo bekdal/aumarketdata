@@ -35,23 +35,28 @@
         const searchInput = document.getElementById("search");
 
         function renderTable(filter = "") {
-          tbody.innerHTML = "";
-          data.filter(row => {
-            const text = \`\${row.ticker} \${row.company} \${row.industry}\`.toLowerCase();
-            return text.includes(filter.toLowerCase());
-          }).forEach(row => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td>${row.ticker}</td>
-              <td>${row.company}</td>
-              <td>${row.industry}</td>
-              <td>${row.close !== undefined && row.close > 0 ? '$' + row.close.toFixed(2) : ''}</td>
-              <td>${row.market_cap || ''}</td>
-            `;
+  tbody.innerHTML = "";
+  data.filter(row => {
+    const text = \`\${row.ticker} \${row.company} \${row.industry}\`.toLowerCase();
+    return text.includes(filter.toLowerCase());
+  }).forEach(row => {
+    const tr = document.createElement("tr");
 
-            tbody.appendChild(tr);
-          });
-        }
+    const closePrice = (typeof row.close === "number" && row.close > 0) ? ('$' + row.close.toFixed(2)) : '';
+    const marketCap = row.market_cap || '';
+
+    tr.innerHTML = \`
+      <td>\${row.ticker}</td>
+      <td>\${row.company}</td>
+      <td>\${row.industry}</td>
+      <td>\${closePrice}</td>
+      <td>\${marketCap}</td>
+    \`;
+
+    tbody.appendChild(tr);
+  });
+}
+
 
         searchInput.addEventListener("input", e => renderTable(e.target.value));
         renderTable(); // initial render
