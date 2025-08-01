@@ -5,17 +5,23 @@
   <meta charset="UTF-8">
   <title>ASX Closing Prices</title>
   <style>
-    table { border-collapse: collapse; width: 100%; }
+    table { border-collapse: collapse; width: 100%; font-family: Arial; }
     th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    th { background-color: #eee; }
+    th { background-color: #f2f2f2; }
+    input { margin: 10px 0; padding: 6px; width: 300px; }
   </style>
 </head>
 <body>
   <h1>ASX Closing Prices (Latest)</h1>
+  <input type="text" id="search" placeholder="Search by ASX code, name or industry..." />
   <table id="price-table">
     <thead>
       <tr>
-        <th>ASX Code</th><th>Company</th><th>Industry</th><th>Closing Price</th><th>Market Cap</th>
+        <th>ASX Code</th>
+        <th>Company</th>
+        <th>Industry</th>
+        <th>Closing Price</th>
+        <th>Market Cap</th>
       </tr>
     </thead>
     <tbody></tbody>
@@ -26,18 +32,28 @@
       .then(response => response.json())
       .then(data => {
         const tbody = document.querySelector("#price-table tbody");
-        data.forEach(row => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-  <td>${row.ticker}</td>
-  <td>${row.company}</td>
-  <td>${row.industry}</td>
-  <td>${row.close > 0 ? '$' + row.close.toFixed(2) : ''}</td>
-  <td>${row.market_cap || ''}</td>
-`;
+        const searchInput = document.getElementById("search");
 
-          tbody.appendChild(tr);
-        });
+        function renderTable(filter = "") {
+          tbody.innerHTML = "";
+          data.filter(row => {
+            const text = \`\${row.ticker} \${row.company} \${row.industry}\`.toLowerCase();
+            return text.includes(filter.toLowerCase());
+          }).forEach(row => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = \`
+              <td>\${row.ticker}</td>
+              <td>\${row.company}</td>
+              <td>\${row.industry}</td>
+              <td>\${row.close > 0 ? '$' + row.close.toFixed(2) : ''}</td>
+              <td>\${row.market_cap || ''}</td>
+            \`;
+            tbody.appendChild(tr);
+          });
+        }
+
+        searchInput.addEventListener("input", e => renderTable(e.target.value));
+        renderTable(); // initial render
       });
   </script>
 </body>
