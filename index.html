@@ -28,7 +28,14 @@
         const tbody = document.querySelector("#price-table tbody");
         data.forEach(row => {
           const tr = document.createElement("tr");
-          tr.innerHTML = `<td>${row.ticker}</td><td>${row.company}</td><td>${row.industry}</td><td>$${row.close.toFixed(2)}</td><td>${row.market_cap || "—"}</td>`;
+          tr.innerHTML = `
+  <td>${row.ticker}</td>
+  <td>${row.company}</td>
+  <td>${row.industry}</td>
+  <td>${row.close > 0 ? '$' + row.close.toFixed(2) : ''}</td>
+  <td>${row.market_cap || ''}</td>
+`;
+
           tbody.appendChild(tr);
         });
       });
